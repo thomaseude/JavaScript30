@@ -59,28 +59,41 @@
 
 <script>
 
-function playSound(e) {
-  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-  if (key == null) {
-    return
-  }
-  key.classList.add('playing');
-  audio.currentTime = 0;
-  audio.play();
-};
-
+//function to remove playing from div class
 function removeTransition(e) {
-  if (e.propertyName !== "transform"){
-    return
+  // Filter on Transform property (Work better when it's done on all properties but probably set processing faster)
+  if (e.propertyName === "transform") {
+    e.target.classList.remove('playing');
   }
-  console.log(e);
-  e.target.classList.remove('playing');
 }
 
-const keys = document.querySelectorAll('.key');
-keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-window.addEventListener('keydown', playSound);
+// Listen when a keyboard is tap
+window.addEventListener("keydown", event => {
+
+  // Definit Cosnt
+  const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+  const playingClass = document.querySelector(`div[data-key="${event.keyCode}"]`);
+
+  //When keyboard match with data key, add playing to Class
+  playingClass.classList.add("playing");
+  //audio.currentTime=0 => Permit don't wait the end of the son to play again
+  audio.currentTime=0;
+  audio.play();
+
+  //Select All key to prepare to loop
+  const selectPlayingClass = document.querySelectorAll('.key');
+
+  selectPlayingClass.forEach(e => {
+    //Listen Transitionend
+    e.addEventListener('transitionend', removeTransition );
+  });
+
+ //When stay push on the same button, create a bug
+ // this is the solution to fix it
+ setTimeout(function(){ playingClass.classList.remove("playing"); }, 3000);
+
+});
+
 </script>
 
 
