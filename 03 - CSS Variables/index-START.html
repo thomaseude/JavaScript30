@@ -31,6 +31,8 @@
       --spacing: 0px;
     }
 
+    /*We manage from input but it's img which take the value*/
+    /*Il faut utiliser les variables des inputs */
     img{
       background: var(--base);
       filter: blur(var(--blur));
@@ -58,18 +60,27 @@
   </style>
 
   <script>
-    const inputs = document.querySelectorAll("input");
-    console.log(inputs)
+    //Select the input
+    const inputs = document.querySelectorAll('input');
+    const img = document.querySelector('img');
 
-    function handleUpdate() {
-      const suffix = (this.dataset.sizing || '');
-      // console.log(this.value + suffix )
-      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
-      // document.getElementById(this.id).style.filter = blur(1px);
+    // function to update Style
+    function updateStyle() {
+      const name = this.name;
+      const value = this.value;
+      const suffix = this.dataset.sizing;
+
+      img.style.setProperty(`--${name}`, value + suffix);
+      // OR
+      // document.documentElement.style.setProperty(`--${name}`, value + suffix);
+
+      //Document.documentElement returns the Element that is the root element of
+      //the document (for example, the <html> element for HTML documents).
     }
 
-    inputs.forEach(input => input.addEventListener('change', handleUpdate));
-    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate))
+    //Ecouter les changements des inputs
+    inputs.forEach(input => input.addEventListener('change', updateStyle));
+
   </script>
 
 </body>
