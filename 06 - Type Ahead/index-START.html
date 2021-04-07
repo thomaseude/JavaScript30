@@ -17,6 +17,51 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+let cities = [];
+
+fetch(endpoint)
+  .then(blob => blob.json())
+  .then(data => cities = data);
+
+//Select input for addEventListener & suggestions for display cities match
+const selectInput = document.querySelector(".search");
+const suggestions = document.querySelector('.suggestions');
+
+//Display list of Cities (WHICH match filter)
+function displayCities() {
+  const matchCities = findMatches(this.value, cities);
+  //map pour faire une modification sur la forme de l'arret (mettre la data en forme)
+  const html = matchCities.map(place => {
+    return `
+      <li>
+        <span class="name">${place.city}, ${place.state}</span>
+      </li>
+    `;
+  //join pour eviter les sauts a la ligne
+  }).join('');
+
+  //innerHTML pour faire modication au HMTL
+  // Transforme le HTML en Text pour pouvoir le remplacer (pas certain)
+  suggestions.innerHTML = html;
+
+};
+
+//Filter Cities
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => {
+    // here we need to figure out if the city or state matches what was searched
+    const regex = new RegExp(wordToMatch, 'gi');
+    return place.city.match(regex) || place.state.match(regex)
+  });
+}
+
+  console.log(suggestions);
+  console.log(suggestions.innerHTML);
+
+  //function of change
+  selectInput.addEventListener('keyup', displayCities);
+
+
 </script>
 </body>
 </html>
