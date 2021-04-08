@@ -6,7 +6,44 @@
 </head>
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
+
+
 <script>
+//Select pixel zone
+const canvas = document.querySelector("#draw")
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+//To draw only if change statut to True
+let isDrawing = false;
+
+
+//Variable to init to draw
+const ctx = canvas.getContext('2d');
+ctx.strokeStyle = '#BADA55';
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+ctx.lineWidth = 50;
+console.log(ctx);
+
+function draw(e) {
+  //Continue only if draw is true
+  if (!isDrawing) return;
+  //Begin of the Path
+  ctx.beginPath(e.offsetX, e.offsetY);
+  //Make line from last pixel to this one
+  ctx.lineTo(e.offsetX, e.offsetY);
+  //draw (only once the variable LineTo is define)
+  ctx.stroke();
+}
+
+//Listen Move
+canvas.addEventListener('mousemove', draw);
+// draw only when click
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mousedown', () => isDrawing = true);
+
+
 </script>
 
 <style>
